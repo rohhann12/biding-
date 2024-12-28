@@ -6,7 +6,7 @@ const {WebSocketServer,WebSocket}=require('ws')
 const redis=require('redis')
 const dummy=require('../data/data')
 
-
+router.use(express.json())
 let redisClient;
 async function connectingClient(){
     try {
@@ -19,11 +19,12 @@ async function connectingClient(){
     }
 }
 connectingClient();
+
 async function addingVal(){
     try {
         const data = await prisma.objects.findMany();
         console.log("hey")
-        console.log(data)
+        // console.log(data)
         if (!data || data.length === 0) {
            console.log("idhr")
         }        
@@ -38,19 +39,16 @@ async function addingVal(){
                 console.log(err)
             }
         });
-        const data1=await redisClient.get('items',objectId===1,(err,reply)=>{
-            console.log(reply)
-            if(err){
-                console.log(err)
-            }
-        })
-        let results=JSON.parse(data1)
-        console.log(results)
+        // const data1=await redisClient.get('items');
+        // let results=JSON.parse(data1);
+        // let objectId=50;
+        // console.log(data1)
+        // const item = results.find(i => i.objectId === objectId);
+        // console.log(item)
     } catch (error) {
         console.log(error)
     }
 }
-addingVal();
 async function updateVal(value){
     // sub to the queue and as values keep coming in we change the value
     try {
@@ -62,7 +60,6 @@ async function updateVal(value){
         
     }
 }
-
 
 router.post("/addData", async (req, res) => {
     try {
@@ -100,25 +97,36 @@ router.post("/addData", async (req, res) => {
 });
 
 // hum http req bhejkr hie value update krenge
-router.post("/updateVal",(req,res)=>{
+router.post("/updateVal",async(req,res)=>{
     const {price,objectId}=req.body
     try {
-        const thatObject=redisClient.get('items',)
-        const oldPrice= 10
+        const thatObject=await redisClient.get('items')
+        const data = JSON.parse(thatObject);
+        const item = data.find(i => i.objectId === objectId);
+        console.log(item)
+        const oldPrice= item.selling_price;
+        console.log(oldPrice)
         if(!oldPrice){
             return res.status(400).json({
                 message:"cant retrieve old value"
             })
         }
+        // function newVal(price){
+            
         if(price<oldPrice){
         return res.status(201).json({
                 message:"amount is less than the last amount"
             })
         }else{
             // idhr redis cache mei update hoga
+            item.selling_price=price
+            const updateSellingPrice=await redisClient.set('items',JSON.stringify(data))
+            console.log(updateSellingPrice)
+            console.log(data)
             return res.status(200).json({message:`amount updated ${price}`})
         }
     } catch (error) {
+        console.log(error)
         res.status(500).json({
             message:"error in updating value"
         })

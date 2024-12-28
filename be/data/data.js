@@ -1,4 +1,4 @@
-export const data=[
+const data=[
     {
       "objectId": 1,
       "name": "Wireless Headphones",
@@ -70,4 +70,6 @@ export const data=[
       "images": ["chair_full.jpg", "chair_side.jpg", "chair_back.jpg"]
     }
   ]
-  
+
+
+module.exports=data

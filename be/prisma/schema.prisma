@@ -19,11 +19,11 @@ model User{
   username String @unique
 }
 
-model Object{
+model objects{
   objectId Int @id @default(autoincrement())
-  name String 
-  cost_price Int
-  selling_price Int
+  name String?
+  cost_price Int?
+  selling_price Int?
   images String[]
 
 }

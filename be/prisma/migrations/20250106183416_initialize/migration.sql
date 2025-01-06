@@ -10,9 +10,9 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "objects" (
     "objectId" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "cost_price" INTEGER NOT NULL,
-    "selling_price" INTEGER NOT NULL,
+    "name" TEXT,
+    "cost_price" INTEGER,
+    "selling_price" INTEGER,
     "images" TEXT[],
 
     CONSTRAINT "objects_pkey" PRIMARY KEY ("objectId")

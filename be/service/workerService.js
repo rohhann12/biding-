@@ -1,7 +1,6 @@
 const express = require('express');
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const router = express();
 const {connectingClient}=require('../config/redisClient')
 
 async function processQueue() {
@@ -43,6 +42,4 @@ async function processQueue() {
 }
 
 
-module.exports={
-    processQueue
-}
+module.exports=processQueue

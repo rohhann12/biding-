@@ -1,10 +1,10 @@
-const { updateVal } = require('../service/bidingService');
+const userService = require('../service/bidingService');
 
 const bidingController = {
     async updateValue(req, res) {
         const { price, objectId } = req.body;
         try {
-            const data = await updateVal(price, objectId);
+            const data = await userService.updateVal(price, objectId);
             return res.status(200).json({ message: data.message });
         } catch (error) {
             console.error("Controller Error:", error);

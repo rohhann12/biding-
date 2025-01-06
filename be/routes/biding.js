@@ -37,4 +37,4 @@ router.post("/updateVal", (req, res) => {
 
 
 
-router.listen(3000);
+module.exports=router
